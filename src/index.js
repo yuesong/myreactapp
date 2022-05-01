@@ -46,6 +46,7 @@ class Game extends React.Component {
     this.state = {
       squares: Array(9).fill(null),
       xIsNext: true,
+      steps: [Array(9).fill(null)],
     }
   }
 
@@ -58,7 +59,29 @@ class Game extends React.Component {
     this.setState({
       squares: squares,
       xIsNext: !this.state.xIsNext,
+      steps: this.state.steps.concat([squares]),
     });
+  }
+
+  handleStepClick(i) {
+    const steps = this.state.steps.slice(0, i + 1);
+    const squares = steps[i];
+    this.setState({
+      squares: squares,
+      xIsNext: i % 2 == 0,
+      steps: steps,
+    });
+  }
+
+  renderStep(i) {
+    let text = i == 0 ? 'Go to game start' : 'Go to move #' + i
+    return (
+      <li key={i}>
+        <button onClick={() => this.handleStepClick(i)}>
+          {text}
+        </button>
+      </li>
+    );
   }
 
   render() {
@@ -67,8 +90,9 @@ class Game extends React.Component {
     if (winner) {
       status = 'Winner: ' + winner;
     } else {
-      status = 'Next player: '+ (this.state.xIsNext ? 'X' : 'O');
+      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
+    const stepList = this.state.steps.map((_, i) => this.renderStep(i));
     return (
       <div className="game">
         <div className="game-board">
@@ -79,7 +103,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div className="status">{status}</div>
-          <ol>{/* TODO */}</ol>
+          <ol>{stepList}</ol>
         </div>
       </div>
     );
