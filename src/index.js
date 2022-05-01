@@ -68,13 +68,13 @@ class Game extends React.Component {
     const squares = steps[i];
     this.setState({
       squares: squares,
-      xIsNext: i % 2 == 0,
+      xIsNext: i % 2 === 0,
       steps: steps,
     });
   }
 
   renderStep(i) {
-    let text = i == 0 ? 'Go to game start' : 'Go to move #' + i
+    let text = i === 0 ? 'Go to game start' : 'Go to move #' + i
     return (
       <li key={i}>
         <button onClick={() => this.handleStepClick(i)}>
