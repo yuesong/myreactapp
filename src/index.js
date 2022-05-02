@@ -51,25 +51,29 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
-    const squares = this.state.squares.slice();
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      squares: squares,
-      xIsNext: !this.state.xIsNext,
-      steps: this.state.steps.concat([squares]),
+    this.setState((state, _) => {
+      const squares = state.squares.slice();
+      if (calculateWinner(squares) || squares[i]) {
+        return {};
+      }
+      squares[i] = state.xIsNext ? 'X' : 'O';
+      return {
+        squares: squares,
+        xIsNext: !state.xIsNext,
+        steps: state.steps.concat([squares]),
+      }
     });
   }
 
   handleStepClick(i) {
-    const steps = this.state.steps.slice(0, i + 1);
-    const squares = steps[i];
-    this.setState({
-      squares: squares,
-      xIsNext: i % 2 === 0,
-      steps: steps,
+    this.setState((state, _) => {
+      const steps = state.steps.slice(0, i + 1);
+      const squares = steps[i];
+      return {
+        squares: squares,
+        xIsNext: i % 2 === 0,
+        steps: steps,
+      }
     });
   }
 
@@ -98,7 +102,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={this.state.squares}
-            onClick={i => this.handleClick(i)}
+            onClick={(i) => this.handleClick(i)}
           />
         </div>
         <div className="game-info">
